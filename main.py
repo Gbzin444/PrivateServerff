@@ -44,5 +44,8 @@ def home():
     return "Servidor Free Fire Online no Render!"
 
 if __name__ == "__main__":
+    # O Render define a porta automaticamente
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
+
