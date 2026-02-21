@@ -5,9 +5,12 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Rota principal que o Free Fire vai pedir (ver.php)
+# Rota exata que o Free Fire antigo pede: /live/ver.php
 @app.route('/live/ver.php', methods=['GET', 'POST', 'OPTIONS'])
 def ver_php():
+    # Log para você ver no painel do Render quando o jogo conectar
+    print(f"Jogo conectou! Método: {request.method} | IP: {request.remote_addr}")
+    
     response_data = {
         "appstore_url": "https://discord.gg/seu-link",
         "billboard_msg": "Servidor Online! Bem-vindo!",
@@ -29,10 +32,16 @@ def ver_php():
     }
     return jsonify(response_data )
 
-# Rota de teste para ver se o servidor está vivo
+# Rota de backup (caso o jogo peça apenas /live/)
+@app.route('/live/', methods=['GET', 'POST'])
+@app.route('/live', methods=['GET', 'POST'])
+def live_root():
+    return ver_php()
+
+# Rota principal para teste no navegador
 @app.route('/')
 def home():
-    return "Servidor Free Fire Online!"
+    return "Servidor Free Fire Online no Render!"
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
